@@ -1,4 +1,3 @@
-//reconhecer o nodemon e inicializar o arquivo js
 {
   "execMap": {
     "js": "sucrase-node"
