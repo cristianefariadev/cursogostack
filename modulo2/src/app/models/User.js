@@ -1,14 +1,13 @@
 import Sequelize, { Model } from 'sequelize'; // importar o model do sequelize
+import bcrypt from 'bcryptjs';
 
 class User extends Model {
-  // classe user que extende o model
   static init(sequelize) {
-    // metodo chamado pelo sequelize
     super.init(
       {
-        // parametros
         name: Sequelize.STRING,
         email: Sequelize.STRING,
+        password: Sequelize.VIRTUAL,
         password_hash: Sequelize.STRING,
         provider: Sequelize.BOOLEAN,
       },
@@ -16,6 +15,14 @@ class User extends Model {
         sequelize,
       }
     );
+
+    this.addHook('beforeSave', async user => {
+      if (user.password) {
+        user.password_hash = await bcrypt.hash(user.password, 8);
+      }
+    });
+
+    return this;
   }
 }
 
