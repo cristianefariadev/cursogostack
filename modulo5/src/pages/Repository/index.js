@@ -2,17 +2,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import api from '../../services/api';
 
-// import { Container } from './styles';
+import { Loading } from './styles';
 
-export default class Repository extends Component {
-  static propTypes = {
-    match: PropTypes.shape({
-      params: PropTypes.shape({
-        repository: PropTypes.string
-      })
-    }).isRequired
-  };
-
+class Repository extends Component {
   state = {
     repository: {},
     issues: [],
@@ -24,7 +16,6 @@ export default class Repository extends Component {
 
     const repoName = decodeURIComponent(match.params.repository);
 
-    // requisições das apis sendo chamadas ao mesmo tempo e pego os paramentros atraves do objeto
     const [repository, issues] = await Promise.all([
       api.get(`/repos/${repoName}`),
       api.get(`/repos/${repoName}/issues`, {
@@ -45,6 +36,19 @@ export default class Repository extends Component {
   render() {
     const { repository, issues, loading } = this.state;
 
+    if (loading) {
+      return <Loading>Carregando</Loading>;
+    }
+
     return <h1>Repository</h1>;
   }
 }
+Repository.propTypes = {
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      repository: PropTypes.string
+    })
+  }).isRequired
+};
+
+export default Repository;
