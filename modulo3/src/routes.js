@@ -4,6 +4,7 @@ import multerConfig from './config/multer';
 
 import UserController from './app/controllers/UserController';
 import SessionController from './app/controllers/SessionController';
+import FileController from './app/controllers/FileController';
 
 import authMiddleware from './app/middlewares/auth';
 
@@ -17,18 +18,6 @@ routes.use(authMiddleware);
 
 routes.put('/users', UserController.update);
 
-routes.posts('/files', upload.single('file'), (req, res) => {
-  return res.json({ ok: true });
-});
+routes.post('/files', upload.single('file'), FileController.store);
 
 export default routes;
-
-// rota teste
-// routes.get('/', async (req, res) => {
-//   const user = await User.create({
-//     name: 'Cristiane Faria',
-//     email: 'cristiane@bitup.com.br',
-//     password_hash: '20934839048',
-//   });
-//   return res.json(user);
-// });
